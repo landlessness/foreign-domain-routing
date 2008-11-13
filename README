@@ -1,0 +1,63 @@
+Foreign Domain Routing
+===========
+
+Foreign Domain Routing provides simple handling of foreign domains in Rails.
+It borrows largely from SubdomainFu and some other snippets found around the web.
+
+Installation
+============
+
+Foreign Domain Routing is available as a plugin. To install it with Rails 2.1 
+or later):
+
+script/plugin install git://github.com/brianmulloy/foreign_domain_routing.git
+
+Examples
+========
+
+Foreign Domain Routing extends Rails's routing mechanisms to provide a way to 
+redirect non-native domains. 
+
+Let's say my rails app domain is 'mydomain.com' and I am creating an app that
+allows users to add a CNAME record to map their subdomain so that 
+'foo.usersdomain.com' would actually point to 'mydomain.com/users/1234'.
+
+The route at the top of config/routes.rb would look like:
+
+map.connect '*path', :controller => 'users',
+:action => 'index', :conditions => { :foreign_domain => true }
+
+And in the users controller:
+
+@user = User.find_by_foreign_domain(request.host.downcase) 
+# this example would require a database field called foreign_domain
+
+Configuration
+=============
+
+You will need to configure Foreign Domain Routing based on your native hostnames. 
+
+native_domains
+--------
+
+A hash of arrays for the native domain names for each relevant environment.
+
+Create the file config/initializers/native_domains.rb and put something like:
+
+ForeignDomainRouting.init_native_domains = {
+  :development => ['localhost'], 
+  :staging => ['staging.example.com'],
+  :production => ['example.com', 'example.org', 'example.net']
+} # set all at once (also the defaults)
+
+
+Or set the native domains on the fly with:
+
+ForeignDomainRouting.native_domains = 
+  ['example.com', 'example.org', 'example.net'] # sets for current environment
+
+Resources
+=========
+
+* GitHub Repository: http://github.com/brianmulloy/foreign_domain_routing
+* 2008 by Brian Mulloy (http://landlessness.net/). Released under the MIT license.
