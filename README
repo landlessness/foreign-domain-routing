@@ -10,7 +10,7 @@ Installation
 Foreign Domain Routing is available as a plugin. To install it with Rails 2.1 
 or later):
 
-script/plugin install git://github.com/brianmulloy/foreign_domain_routing.git
+script/plugin install git://github.com/brianmulloy/foreign-domain-routing.git
 
 Examples
 ========
